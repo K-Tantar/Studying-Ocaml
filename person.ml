@@ -72,3 +72,26 @@ let ketsueki person = match person with
   let test7 = otomeza [] = [] ;;
   let test8 = otomeza [{name = "京井亮太"; sintyo = 173.4; taijyu = 46.2; tuki_bi = 8; hi_bi = 25; ketsueki = "A"} ;{name = "京井正之"; sintyo = 171.0; taijyu = 79.8; tuki_bi = 6; hi_bi = 11; ketsueki = "A"} ;{name = "Joh"; sintyo = 167.4; taijyu = 51.7; tuki_bi = 9 ; hi_bi = 5; ketsueki = "AB"}] = ["京井亮太";"Joh"] ;;
   let test9 = otomeza [{name = "alpha"; sintyo = 123.0; taijyu = 30.0; tuki_bi = 9; hi_bi = 1; ketsueki = "A"}] = ["alpha"] ;;
+
+(*目的:insertのperson_t型Ver.*)
+(*person_insert : person_t -> person_t list -> person_t list *)
+  
+let rec person_insert n lst = match n with
+    ({name = na2; sintyo = si2; taijyu = ta2; tuki_bi = tu2; hi_bi = hi2; ketsueki = ke2}) as l -> match lst with
+    [] -> l :: []
+  | ({name = na; sintyo = si2; taijyu = ta2; tuki_bi = tu2; hi_bi = hi2; ketsueki = ke2}) as first :: rest -> if na2 < na then l :: first :: rest
+    else first :: person_insert l rest ;;  (*person_insert n rest *)
+
+  
+(*目的:person_t型のリストを受け取ったら、それを名前の順に返したリストを返す。*)
+(* person_sort : string list -> string list *)
+
+  let rec person_sort lst = match lst with
+      [] -> []
+    | ({name = na; sintyo = si; taijyu = ta; tuki_bi = tu; hi_bi = hi; ketsueki = ke}) as first :: rest ->
+       person_insert first (person_sort rest) ;;
+	 
+(*テスト*)
+  let test10 = person_sort [] ;;
+  let test11 = person_sort [{name = "Ryota"; sintyo = 173.4; taijyu = 46.2; tuki_bi = 8; hi_bi = 25; ketsueki = "A"} ;{name = "Masayuki"; sintyo = 171.0; taijyu = 79.8; tuki_bi = 6; hi_bi = 11; ketsueki = "A"} ;{name = "Joh"; sintyo = 167.4; taijyu = 51.7; tuki_bi = 9 ; hi_bi = 5; ketsueki = "AB"}] ;;
+  let test12 = person_sort [{name = "Alpha"; sintyo = 123.0; taijyu = 30.0; tuki_bi = 9; hi_bi = 1; ketsueki = "A"}] ;;
